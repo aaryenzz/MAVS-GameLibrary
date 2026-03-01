@@ -169,6 +169,6 @@ if __name__ == '__main__':
     os.makedirs(os.path.join(os.path.dirname(__file__), 'templates'), exist_ok=True)
     
     # Run the application
-    app.run()
+    app.run(debug=True, host='0.0.0.0')
 
 # debug=True, port=5000
