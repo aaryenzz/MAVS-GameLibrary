@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAVS Game Library</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Google Sans', 'Roboto', sans-serif;
+            background-image: url('/static/VioletWallpaper.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #ffffff;
+            /* Clean light gray */
+            padding-bottom: 3rem;
+
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: linear-gradient(to right, #6512ff, #803bff);
+            background-color: rgb(255, 255, 255);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #202124 !important;
+            font-size: 1.5rem;
+        }
+
+        .search-bar {
+            background-color: #f1f3f4;
+            border: none;
+            border-radius: 24px;
+            padding: 0.6rem 1.5rem 0.6rem 2.5rem;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-bar:focus {
+            background-color: white;
+            box-shadow: 0 1px 6px rgba(32, 33, 36, 0.28);
+            border-color: transparent;
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #5f6368;
+        }
+
+        .search-wrapper {
+            position: relative;
+            flex-grow: 1;
+            margin: 0 2rem;
+        }
+
+        /* Material Elevated Game Card */
+        .game-card {
+            background: rgb(255, 255, 255);
+            border: none;
+            border-radius: 24px;
+            /* Stitch Large Radius */
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-card:hover {
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.05), 0 10px 10px rgba(0, 0, 0, 0.05);
+            /* Elevated Hover */
+            transform: translateY(-4px);
+        }
+
+        .game-img {
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+            background-color: #e8eaed;
+            /* Fallback */
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .game-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #202124;
+            margin-bottom: 0.25rem;
+        }
+
+        .game-subtitle {
+            font-size: 0.875rem;
+            color: #5f6368;
+            margin-bottom: 1rem;
+        }
+
+        /* Material Chips */
+        .chip {
+            display: inline-block;
+            padding: 0 12px;
+            height: 32px;
+            font-size: 13px;
+            line-height: 32px;
+            border-radius: 16px;
+            background-color: #e8eaed;
+            color: #3c4043;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .chip-primary {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+        }
+
+        /* Tonal Container */
+        .min-req-container {
+            background-color: #f1f3f4;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            margin-top: auto;
+            /* Push to bottom of flex container */
+            font-size: 0.875rem;
+            color: #000000;
+        }
+
+        .min-req-container strong {
+            color: #000000;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Nav Buttons */
+        .btn-tonal {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-tonal:hover {
+            background-color: #d2e3fc;
+            color: #1a73e8;
+        }
+
+        .btn-outline {
+            border: 2px solid #dadce0;
+            color: #000000;
+            border-radius: 20px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 500;
+        }
+
+        .btn-outline:hover {
+            background-color: #f1f3f4;
+            color: #202124;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container d-flex align-items-center">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}"
+                style="color: white !important;">
+                <i class="bi bi-controller fs-4 me-2" style="color: black !important;"></i>
+                MAVS Game Library
+            </a>
+
+            <!-- Search Bar -->
+            <div class="search-wrapper">
+                <form action="{{ url_for('index') }}" method="GET" class="d-flex w-100 position-relative">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" name="q" class="search-bar" placeholder="Search games..." value="{{ q }}">
+                </form>
+            </div>
+
+            <!-- User Area -->
+            <div class="d-flex align-items-center">
+                {% if role == 'admin' %}
+                <a href="{{ url_for('manage') }}" class="btn btn-tonal me-3">
+                    <i class="bi bi-shield-lock me-1"></i> Manage
+                </a>
+                {% endif %}
+                <a href="{{ url_for('credits') }}" class="btn btn-outline me-3">Credits</a>
+                <span class="small me-3 fw-medium d-none d-md-block" style="color: white !important;">{{
+                    session['username'] }}</span>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline btn-sm">Sign out</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        {% if q %}
+        <div class="mb-4">
+            <h5 class="text-muted">Search results for "<span class="text-dark">{{ q }}</span>"</h5>
+        </div>
+        {% endif %}
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            {% for game in games %}
+            <div class="col">
+                <div class="game-card">
+                    <!-- Image -->
+                    {% if game.image_url %}
+                    <img src="{{ game.image_url }}" alt="{{ game.title }}" class="game-img">
+                    {% else %}
+                    <div class="game-img d-flex align-items-center justify-content-center text-muted">
+                        <i class="bi bi-image fs-1 opacity-25"></i>
+                    </div>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <!-- Title & Subtitle -->
+                        <h2 class="game-title">{{ game.title }}</h2>
+                        <div class="game-subtitle">
+                            {{ game.publisher }} • {{ game.release_year }}
+                        </div>
+
+                        <!-- Chips -->
+                        <div class="mb-3">
+                            {% if game.genre %}
+                            <span class="chip chip-primary">{{ game.genre }}</span>
+                            {% endif %}
+                            {% if game.file_size_gb %}
+                            <span class="chip">{{ game.file_size_gb }} GB</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Min Requirements Tonal Container -->
+                        <div class="min-req-container mt-auto">
+                            <strong>Minimum PC Requirements</strong>
+                            {{ game.min_requirements or 'Not specified' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <div class="text-muted">
+                    <i class="bi bi-search fs-1 mb-3 d-block opacity-50"></i>
+                    <h5>No games found</h5>
+                    {% if q %}
+                    <p>Try adjusting your search query.</p>
+                    <a href="{{ url_for('index') }}" class="btn btn-outline mt-2">Clear Search</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

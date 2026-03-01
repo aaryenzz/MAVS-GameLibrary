@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Games - Admin</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@400;500&display=swap"
+        rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Google Sans', 'Roboto', sans-serif;
+            background-image: url('/static/VioletWallpaper.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+
+            background-color: #f8f9fa;
+            padding-bottom: 3rem;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background: linear-gradient(to right, #6512ff, #803bff);
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #202124 !important;
+            font-size: 1.5rem;
+        }
+
+        /* Nav Buttons */
+        .btn-outline {
+            border: 1px solid #dadce0;
+            color: #ffffff;
+            border-radius: 20px;
+            padding: 0.5rem 1.25rem;
+            font-weight: 500;
+        }
+
+        .btn-outline:hover {
+            background-color: #f1f3f4;
+            color: #202124;
+        }
+
+        /* Material Surface Card */
+        .surface-card {
+            background: rgb(255, 255, 255);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-weight: 700;
+            color: #202124;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Material Inputs */
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            /* Slightly squarer for fields */
+            padding: 0.75rem 1rem;
+            background-color: #f1f3f4;
+            border: 1px solid transparent;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: white;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 0.2rem rgba(26, 115, 232, 0.25);
+        }
+
+        .form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #5f6368;
+            margin-left: 0.25rem;
+        }
+
+        /* Primary Button */
+        .btn-primary {
+            background-color: #1a73e8;
+            border: none;
+            border-radius: 20px;
+            padding: 0.6rem 2rem;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background-color: #1557b0;
+        }
+
+        /* Danger Tonal Button */
+        .btn-danger-tonal {
+            background-color: #fce8e6;
+            color: #d93025;
+            border: none;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .btn-danger-tonal:hover {
+            background-color: #fad2cf;
+        }
+
+        /* Edit Tonal Button */
+        .btn-edit-tonal {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            border: none;
+            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .btn-edit-tonal:hover {
+            background-color: #d2e3fc;
+        }
+
+        /* Table Design */
+        .table {
+            vertical-align: middle;
+        }
+
+        .table th {
+            color: #5f6368;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border-bottom: 2px solid #e8eaed;
+            padding-bottom: 1rem;
+        }
+
+        .table td {
+            color: #202124;
+            padding: 1rem 0.5rem;
+            border-bottom: 1px solid #e8eaed;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container d-flex align-items-center justify-content-between">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}"
+                style="color: white !important;">
+                <i class="bi bi-controller fs-4 me-2" style="color: black !important;"></i>
+                MAVS Game Library <span class="ms-2 fs-6 fw-normal" style="color: white !important;">| Admin</span>
+            </a>
+
+            <div class="d-flex align-items-center">
+                <a href="{{ url_for('credits') }}" class="btn btn-outline me-3">Credits</a>
+                <a href="{{ url_for('index') }}" class="btn btn-outline me-3">View Site</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-outline btn-sm">Sign out</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} rounded-4 border-0 mb-4">{{
+            message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <div class="row">
+            <!-- Add New Game Form -->
+            <div class="col-xl-4 col-lg-5 mb-4">
+                <div class="surface-card">
+                    <h4 class="section-title"><i class="bi bi-plus-circle-fill text-primary me-2"></i> Add Game</h4>
+
+                    <form action="{{ url_for('manage') }}" method="post">
+                        <input type="hidden" name="action" value="add">
+
+                        <div class="mb-3">
+                            <label class="form-label">Title *</label>
+                            <input type="text" name="title" class="form-control" required>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Publisher</label>
+                                <input type="text" name="publisher" class="form-control">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Developer</label>
+                                <input type="text" name="developer" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Genre</label>
+                                <input type="text" name="genre" class="form-control" placeholder="e.g. RPG">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label">Year</label>
+                                <input type="number" name="release_year" class="form-control" placeholder="e.g. 2004">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">File Size (GB)</label>
+                            <input type="number" step="0.001" name="file_size_gb" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Image URL</label>
+                            <input type="url" name="image_url" class="form-control" placeholder="https://...">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Minimum PC Requirements</label>
+                            <input type="text" name="min_requirements" class="form-control"
+                                placeholder="e.g. OS: Win 10 | CPU: i5 | RAM: 8GB">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Add to DB</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Existing Games Table -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="surface-card">
+                    <h4 class="section-title"><i class="bi bi-collection-fill text-primary me-2"></i> Database entries
+                    </h4>
+
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Year</th>
+                                    <th>Size</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for game in games %}
+                                <tr>
+                                    <td class="text-muted">#{{ game.id }}</td>
+                                    <td class="fw-bold">{{ game.title }}</td>
+                                    <td>{{ game.release_year or '-' }}</td>
+                                    <td>{{ game.file_size_gb or '-' }} GB</td>
+                                    <td class="text-end">
+                                        <!-- Note: Edit uses modal in full impl, here we just show delete for brevity in antigravity -->
+                                        <!-- Edit Modal Trigger -->
+                                        <button type="button" class="btn btn-edit-tonal me-2" data-bs-toggle="modal"
+                                            data-bs-target="#editModal{{ game.id }}">
+                                            Edit
+                                        </button>
+
+                                        <!-- Delete Form -->
+                                        <form action="{{ url_for('manage') }}" method="post" class="d-inline"
+                                            onsubmit="return confirm('Delete {{ game.title }}?');">
+                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="id" value="{{ game.id }}">
+                                            <button type="submit" class="btn btn-danger-tonal">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                                <!-- Edit Modal for this specific game -->
+                                <div class="modal fade" id="editModal{{ game.id }}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content" style="border-radius: 24px; border: none;">
+                                            <div class="modal-header border-0 pb-0 mt-3 mx-3">
+                                                <h5 class="modal-title fw-bold">Edit {{ game.title }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <form action="{{ url_for('manage') }}" method="post">
+                                                    <input type="hidden" name="action" value="edit">
+                                                    <input type="hidden" name="id" value="{{ game.id }}">
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Title *</label>
+                                                        <input type="text" name="title" class="form-control"
+                                                            value="{{ game.title }}" required>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label">Publisher</label>
+                                                            <input type="text" name="publisher" class="form-control"
+                                                                value="{{ game.publisher or '' }}">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label">Developer</label>
+                                                            <input type="text" name="developer" class="form-control"
+                                                                value="{{ game.developer or '' }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label">Genre</label>
+                                                            <input type="text" name="genre" class="form-control"
+                                                                value="{{ game.genre or '' }}">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label">Year</label>
+                                                            <input type="number" name="release_year"
+                                                                class="form-control"
+                                                                value="{{ game.release_year or '' }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">File Size (GB)</label>
+                                                        <input type="number" step="0.001" name="file_size_gb"
+                                                            class="form-control" value="{{ game.file_size_gb or '' }}">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label class="form-label">Image URL</label>
+                                                        <input type="url" name="image_url" class="form-control"
+                                                            value="{{ game.image_url or '' }}">
+                                                    </div>
+
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Minimum PC Requirements</label>
+                                                        <input type="text" name="min_requirements" class="form-control"
+                                                            value="{{ game.min_requirements or '' }}">
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-primary w-100">Save
+                                                        Changes</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">No games in database.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
